@@ -1,6 +1,11 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+
+
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -39,9 +44,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -66,4 +68,34 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // coil
+    implementation(libs.coil.compose)
+    // navigation
+    implementation(libs.androidx.navigation.compose)
+
+
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.lifecycle.viewmodel.ktx)
+
+
+//    implementation(libs.hilt)
+//    ksp(libs.hilt.compiler)
+//    implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.coroutines)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp3)
+    implementation(libs.gson)
+    implementation(libs.gson.converter)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    implementation(libs.datastore)
+    implementation(libs.lottie.compose)
+
 }
