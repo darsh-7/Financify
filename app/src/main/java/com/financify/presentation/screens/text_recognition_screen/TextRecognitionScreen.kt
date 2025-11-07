@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +33,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.financify.presentation.navigation.Screens
+import com.financify.presentation.screens.text_recognition_screen.components.CameraPreview
 import com.financify.presentation.screens.text_recognition_screen.viewmodel.TextRecognitionViewModel
 
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
@@ -102,7 +103,7 @@ fun TextRecognitionScreen(navController: NavController, viewModel: TextRecogniti
                 }
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
+                    imageVector = Icons.Filled.AddCircle,
                     contentDescription = "Take picture"
                 )
             }

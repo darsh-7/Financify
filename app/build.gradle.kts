@@ -74,7 +74,7 @@ dependencies {
     implementation(libs.coil.compose)
     // navigation
     implementation(libs.androidx.navigation.compose)
-
+    //kotlin("pluginserialization") version "2.0.21"
 
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
@@ -106,5 +106,6 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
+    implementation(libs.google.generativeai)
 
 }

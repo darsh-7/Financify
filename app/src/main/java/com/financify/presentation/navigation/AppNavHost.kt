@@ -1,6 +1,7 @@
 package com.financify.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,11 +17,12 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screens.TextRecognitionScreen.route
+        startDestination = Screens.TextRecognitionScreen.route,
+        modifier = modifier
     ) {
         composable(route = Screens.TextRecognitionScreen.route) {
             TextRecognitionScreen(navController = navController)

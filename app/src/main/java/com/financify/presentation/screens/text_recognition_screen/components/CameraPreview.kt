@@ -1,4 +1,4 @@
-package com.financify.presentation.screens.text_recognition_screen
+package com.financify.presentation.screens.text_recognition_screen.components
 
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
