@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.financify.presentation.screens.cam_scan_screen.RepoListScreen
+import com.financify.presentation.screens.savings_screen.AddGoalScreen
+import com.financify.presentation.screens.savings_screen.SavingsListScreen
 import com.financify.presentation.screens.transaction_screen.RepoDetailsScreen
 import com.financify.presentation.utils.Constants.Companion.NAME_ARGUMENT_KEY
 import com.financify.presentation.utils.Constants.Companion.OWNER_ARGUMENT_KEY
@@ -17,8 +19,25 @@ fun AppNavHost() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Screens.RepoListScreen.route
+//        startDestination = Screens.RepoListScreen.route
+        startDestination = Screens.SavingListScreen.route
     ) {
+
+        composable(route= Screens.SavingListScreen.route){ SavingsListScreen(navController = navController) }
+
+        composable(
+            route = Screens.AddGoalScreen.route,
+            arguments = listOf(
+                navArgument("goalId") {
+                    type = NavType.StringType
+                    defaultValue = "-1"
+                    nullable = true
+                }
+            )
+        ) {
+            AddGoalScreen(navController = navController)
+        }
+
         composable(route = Screens.RepoListScreen.route) {
             RepoListScreen { ownerName, name ->
                 navController.navigate(Screens.RepoDetailsScreen.passOwnerAndName(ownerName, name))

@@ -7,10 +7,14 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "saving_goals")
 data class SavingGoal(
     @PrimaryKey val id: String,
-    //val userId: String, // Foreign key to the User
-    val name: String, // e.g., "iPhone 13 Mini", "Car"
+   val userId: String, // Foreign key to the User
+    val goalName: String,
     val targetAmount: Double,
-    var currentAmount: Double = 0.0,
-    val color: String, // Hex color code
-//    val icon: String // An identifier for an icon (e.g., "ic_phone", "ic_car")
+    val savedAmount: Double,
+    val goalType: String,
+    val selectedDate: String,
+    val note: String,
+    val color: String,
+val icon: String
 )
+

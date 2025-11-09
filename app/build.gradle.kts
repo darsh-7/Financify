@@ -97,5 +97,11 @@ dependencies {
 
     implementation(libs.datastore)
     implementation(libs.lottie.compose)
+    implementation("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation("androidx.compose.material3:material3:1.3.0")
+    implementation("androidx.compose.ui:ui:1.7.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
+    implementation("androidx.compose.ui:ui-text-android:1.6.0") // أو النسخة التي تستخدمها
 
 }
