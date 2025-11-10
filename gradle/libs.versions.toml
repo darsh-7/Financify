@@ -20,6 +20,7 @@ gson = "2.11.0"
 room = "2.6.1"
 datastore = "1.1.1"
 lottie = "6.4.1"
+identityDoctypesJvm = "202411.1"
 
 
 
@@ -62,6 +63,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+identity-doctypes-jvm = { group = "com.android.identity", name = "identity-doctypes-jvm", version.ref = "identityDoctypesJvm" }
 
 
 

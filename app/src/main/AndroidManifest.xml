@@ -14,6 +14,10 @@
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Financify" />
+        <activity
+            android:name=".presentation.screens.home_screen.HomeActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Financify">
