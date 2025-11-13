@@ -13,6 +13,16 @@
         android:theme="@style/Theme.Financify"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.screens.receipt_screen.ReceiptActivity"
+            android:exported="false"
+            android:label="@string/title_activity_receipt"
+            android:theme="@style/Theme.Financify" />
+        <activity
+            android:name=".presentation.screens.add_transaction.AddTransactionActivity"
+            android:exported="false"
+            android:label="@string/title_activity_add_balance"
+            android:theme="@style/Theme.Financify" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
@@ -23,6 +33,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths"/>
+        </provider>
+
     </application>
 
 </manifest>
