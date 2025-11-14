@@ -3,8 +3,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
-
-
     alias(libs.plugins.compose.compiler)
 }
 
@@ -44,9 +42,22 @@ android {
     buildFeatures {
         compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += listOf(
+                "/META-INF/{AL2.0,LGPL2.1}",
+                "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt"
+            )
         }
     }
 }
@@ -61,6 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.identity.doctypes.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -69,12 +81,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
-    // coil
+    // Coil
     implementation(libs.coil.compose)
-    // navigation
+
+    // Navigation
     implementation(libs.androidx.navigation.compose)
-    //kotlin("pluginserialization") version "2.0.21"
+
 
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.runtime.compose)
@@ -85,16 +97,19 @@ dependencies {
 //    ksp(libs.hilt.compiler)
 //    implementation(libs.hilt.navigation.compose)
 
+    // Coroutines + Network
     implementation(libs.coroutines)
     implementation(libs.retrofit)
     implementation(libs.okhttp3)
     implementation(libs.gson)
     implementation(libs.gson.converter)
 
+    // Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
+    // Datastore + Lottie
     implementation(libs.datastore)
     implementation(libs.lottie.compose)
 
