@@ -6,10 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.financify.data.data_sources.local.room.entities.Transaction
 import com.financify.data.data_sources.local.room.entities.TransactionType
 import com.financify.data.repository.TransactionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -28,11 +31,13 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
     var description by mutableStateOf("")
     var isCategory by mutableStateOf(false)
 
+    val transactions: Flow<PagingData<Transaction>> = repository.getPaginatedTransactions().cachedIn(viewModelScope)
+
     // Get categories based on the selected type
     @OptIn(ExperimentalCoroutinesApi::class)
     val categories: StateFlow<List<Transaction>> = snapshotFlow { type }.flatMapLatest { type ->
-            repository.getCategoriesByType(type)
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+        repository.getCategoriesByType(type)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
 
     // Save transaction and return its ID

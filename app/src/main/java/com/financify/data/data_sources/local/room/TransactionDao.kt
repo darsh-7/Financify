@@ -1,5 +1,6 @@
 package com.financify.data.data_sources.local.room
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -24,4 +25,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAllTransactions(): Flow<List<Transaction>>
+
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
+    fun getTransactions(): PagingSource<Int, Transaction>
 }

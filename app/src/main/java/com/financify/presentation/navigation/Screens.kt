@@ -20,7 +20,7 @@ import java.net.URLEncoder
 import com.financify.presentation.utils.Constants.Companion.SAVING_LIST_SCREEN
 
 sealed class Screens(val route: String) {
-    data object RepoListScreen : Screens(REPO_LIST_SCREEN)
+    data object TransactionListScreen : Screens(REPO_LIST_SCREEN)
 
     data object RepoDetailsScreen :
         Screens("$REPO_DETAILS_SCREEN/{$OWNER_ARGUMENT_KEY}/{$NAME_ARGUMENT_KEY}") {

@@ -100,14 +100,14 @@ fun HomeScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState())
     ) {
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp),
+                .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -419,7 +419,6 @@ fun HomeScreen(navController: NavController) {
             TextButton(
                 onClick = {
                     navController.navigate(Screens.SavingListScreen.route)
-                    Toast.makeText(context, "See All Savings clicked", Toast.LENGTH_SHORT).show()
                 }
             ) {
                 Text(
@@ -519,7 +518,7 @@ fun HomeScreen(navController: NavController) {
 
             TextButton(
                 onClick = {
-                    Toast.makeText(context, "See All Transactions clicked", Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screens.TransactionListScreen.route)
                 }
             ) {
                 Text(
@@ -607,9 +606,8 @@ fun HomeScreen(navController: NavController) {
         }
     }
 }
-
-//@Preview(showBackground = true,)
-//@Composable
-//fun HomeScreenPreview() {
+        @Preview(showBackground = true,)
+@Composable
+fun HomeScreenPreview() {
 //    HomeScreen()
-//}
+}

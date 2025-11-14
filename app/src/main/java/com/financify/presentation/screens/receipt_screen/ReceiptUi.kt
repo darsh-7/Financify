@@ -52,6 +52,7 @@ import androidx.navigation.NavController
 import com.financify.R
 import com.financify.data.data_sources.local.room.entities.Transaction
 import com.financify.data.repository.TransactionRepository
+import com.financify.presentation.navigation.Screens
 import com.financify.presentation.screens.receipt_screen.components.NotchedTicketShape
 import java.io.File
 import java.io.FileOutputStream
@@ -172,7 +173,7 @@ fun ReceiptUi(
                     .fillMaxWidth()
                     .height(50.dp),
                 shape = RoundedCornerShape(10.dp),
-                onClick = { navController.navigate("repo_list_screen") },
+                onClick = { navController.popBackStack(Screens.HomeScreen.route,true,) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0C9BF9))
             ) {
                 Text("Home", color = Color.White, fontSize = 18.sp)

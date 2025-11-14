@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -41,10 +40,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
 
     packaging {
@@ -108,16 +103,12 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+    implementation("androidx.room:room-paging:2.6.1")
 
     // Datastore + Lottie
     implementation(libs.datastore)
     implementation(libs.lottie.compose)
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
-    implementation("androidx.compose.material3:material3:1.3.0")
-    implementation("androidx.compose.ui:ui:1.7.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.7.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.0")
-    implementation("androidx.compose.ui:ui-text-android:1.6.0") // أو النسخة التي تستخدمها
+    implementation("androidx.compose.material:material-icons-extended")
 
     //OCR
     implementation(libs.mlkit.text.recognition)
@@ -130,4 +121,9 @@ dependencies {
     implementation(libs.google.generativeai)
 
     implementation("de.charlex.compose:speeddial:1.1.1")
+
+    // Paging
+    val pagingVersion = "3.3.0"
+    implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
+    implementation("androidx.paging:paging-compose:$pagingVersion")
 }
