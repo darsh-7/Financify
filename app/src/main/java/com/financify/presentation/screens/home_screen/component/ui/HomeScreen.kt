@@ -34,7 +34,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.financify.presentation.navigation.Screens
 import com.financify.presentation.screens.home_screen.model.IncomeSource
 import com.financify.presentation.screens.home_screen.model.SavingItem
 import com.financify.presentation.screens.home_screen.model.Transaction
@@ -44,7 +46,7 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     val context = LocalContext.current
     val transactionsList = listOf(
         Transaction("1", "Salary", "fixed salary", 1200.0, LocalDate.now(), true),
@@ -416,6 +418,7 @@ fun HomeScreen() {
 
             TextButton(
                 onClick = {
+                    navController.navigate(Screens.SavingListScreen.route)
                     Toast.makeText(context, "See All Savings clicked", Toast.LENGTH_SHORT).show()
                 }
             ) {
@@ -604,8 +607,9 @@ fun HomeScreen() {
         }
     }
 }
-        @Preview(showBackground = true,)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}
+
+//@Preview(showBackground = true,)
+//@Composable
+//fun HomeScreenPreview() {
+//    HomeScreen()
+//}

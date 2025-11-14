@@ -7,7 +7,10 @@ import androidx.room.Query
 import com.financify.data.data_sources.local.room.entities.Transaction
 
 @Dao
-interface RepoListDao {
+interface
+
+
+RepoListDao {
 
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
 //    suspend fun insertTransactionList(repoList: List<Transaction>)
