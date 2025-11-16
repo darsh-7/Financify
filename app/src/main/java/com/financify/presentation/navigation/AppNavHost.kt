@@ -1,9 +1,18 @@
 package com.financify.presentation.navigation
 
+import androidx.biometric.BiometricManager
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -13,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.financify.data.DataStoreManager
 import com.financify.data.data_sources.local.room.AppDatabase
 import com.financify.data.data_sources.local.room.entities.TransactionType
 import com.financify.data.repository.TransactionRepository
@@ -31,6 +41,9 @@ import com.financify.presentation.screens.text_recognition_screen.TextRecognitio
 import com.financify.presentation.screens.transaction_screen.RepoDetailsScreen
 import com.financify.presentation.utils.Constants
 import java.net.URLDecoder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch 
 
 
 @Composable
@@ -39,12 +52,52 @@ fun AppNavHost() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-
     val context = LocalContext.current
+    val dataStoreManager = remember { DataStoreManager(context) }
+    val biometricEnabled by dataStoreManager.biometricEnabledFlow.collectAsState(initial = null)
+    var showBiometricDialog by remember { mutableStateOf(false) }
+
     val dao = AppDatabase.getDatabase(context).TransactionDao()
     val repository = TransactionRepository(dao)
     val factory = TransactionViewModelFactory(repository)
     val viewModel: TransactionViewModel = viewModel(factory = factory)
+
+    LaunchedEffect(biometricEnabled) {
+        if (biometricEnabled == null) {
+            val biometricManager = BiometricManager.from(context)
+            if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
+                showBiometricDialog = true
+            }
+        }
+    }
+
+    if (showBiometricDialog) {
+        AlertDialog(
+            onDismissRequest = { showBiometricDialog = false },
+            title = { Text("Enable Biometric Authentication") },
+            text = { Text("Do you want to use biometric authentication to secure your app?") },
+            confirmButton = {
+                Button(onClick = {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        dataStoreManager.setBiometricEnabled(true)
+                    }
+                    showBiometricDialog = false
+                }) {
+                    Text("Enable")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        dataStoreManager.setBiometricEnabled(false)
+                    }
+                    showBiometricDialog = false
+                }) {
+                    Text("Disable")
+                }
+            }
+        )
+    }
 
     Scaffold(
         bottomBar = {
@@ -67,7 +120,7 @@ fun AppNavHost() {
                 TextRecognitionScreen(navController = navController)
             }
             composable(route = Screens.AnalysisScreen.route) {
-                AnalysisScreen()
+                AnalysisScreen(dataStoreManager = dataStoreManager)
             }
 
             composable(

@@ -126,4 +126,10 @@ dependencies {
     val pagingVersion = "3.3.0"
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
     implementation("androidx.paging:paging-compose:$pagingVersion")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // Biometric
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
 }

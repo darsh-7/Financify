@@ -3,47 +3,69 @@ package com.financify
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentActivity
+import com.financify.data.DataStoreManager
 import com.financify.presentation.navigation.AppNavHost
 import com.financify.presentation.theme.FinancifyTheme
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
+class MainActivity : FragmentActivity() {
 
-class MainActivity : ComponentActivity() {
+    private lateinit var dataStoreManager: DataStoreManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // enableEdgeToEdge()
-        setContent {
-            FinancifyTheme {
-                AppNavHost(/*modifier = Modifier.padding(innerPadding)*/)
+        installSplashScreen()
 
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                }
+        dataStoreManager = DataStoreManager(this)
+
+        val biometricEnabled = runBlocking { dataStoreManager.biometricEnabledFlow.first() }
+
+        if (biometricEnabled == true) {
+            showBiometricPrompt()
+        } else {
+            setContent {
+                FinancifyTheme {
+                    AppNavHost()
                 }
-
+            }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun showBiometricPrompt() {
+        val biometricManager = BiometricManager.from(this)
+        if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Biometric login for Financify")
+                .setSubtitle("Log in using your biometric credential")
+                .setNegativeButtonText("Use account password")
+                .build()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FinancifyTheme {
-        Greeting("Android")
+            val biometricPrompt = BiometricPrompt(this,
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        setContent {
+                            FinancifyTheme {
+                                AppNavHost()
+                            }
+                        }
+                    }
+                })
+
+            biometricPrompt.authenticate(promptInfo)
+        } else {
+            setContent {
+                FinancifyTheme {
+                    AppNavHost()
+                }
+            }
+        }
     }
 }
