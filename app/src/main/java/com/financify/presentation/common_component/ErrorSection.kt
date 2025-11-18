@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +34,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.financify.R
 
 import com.financify.presentation.model.CustomRemoteExceptionUiModel
-import com.financify.presentation.theme.LightGray
 import com.financify.presentation.theme.LightGreen
 
 
@@ -89,7 +89,7 @@ fun ErrorSection(
 
         OutlinedButton(
             colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Transparent),
-            border = BorderStroke(2.dp, LightGreen),
+            border = BorderStroke(2.dp,  LightGreen),
             modifier = Modifier
                 .fillMaxWidth(0.8f),
             onClick = {
