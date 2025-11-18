@@ -4,6 +4,9 @@ class Constants {
     companion object {
         const val REPO_DETAILS_SCREEN = "repo_details_screen"
         const val REPO_LIST_SCREEN = "repo_list_screen"
+
+        const val TRANSACTION_LIST_SCREEN = "transaction_list_screen"
+        const val USER_ID_ARGUMENT_KEY = "user_id_key"
         const val ISSUES_LIST_SCREEN = "repo_Issues_screen"
 
 
