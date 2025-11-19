@@ -26,11 +26,9 @@ import com.financify.presentation.screens.home_screen.component.ui.HomeScreen
 import com.financify.presentation.screens.receipt_screen.ReceiptUi
 import com.financify.presentation.screens.savings_screen.AddGoalScreen
 import com.financify.presentation.screens.savings_screen.SavingsListScreen
-import com.financify.presentation.screens.text_recognition_screen.TextRecognitionResultScreen
 import com.financify.presentation.screens.text_recognition_screen.TextRecognitionScreen
 import com.financify.presentation.screens.transaction_screen.RepoDetailsScreen
 import com.financify.presentation.utils.Constants
-import java.net.URLDecoder
 
 
 @Composable
@@ -61,34 +59,23 @@ fun AppNavHost() {
             modifier = Modifier.padding(it)
         ) {
             composable(route = Screens.HomeScreen.route) {
-                HomeScreen(navController = navController)
+                HomeScreen(
+                    viewModel = viewModel,
+                    onAddTransactionClicked = { type ->
+                        navController.navigate("transaction/${type.name}")
+                    },
+                    navController = navController
+                )
             }
             composable(route = Screens.TextRecognitionScreen.route) {
-                TextRecognitionScreen(navController = navController)
+                TextRecognitionScreen(viewModel = viewModel, navController = navController)
             }
             composable(route = Screens.AnalysisScreen.route) {
                 AnalysisScreen()
             }
 
-            composable(
-                route = Screens.TextRecognitionResultScreen.route,
-                arguments = listOf(navArgument(Constants.TEXT_ARGUMENT_KEY) {
-                    type = NavType.StringType
-                })
-            ) { navBackStackEntry ->
-                val text = navBackStackEntry.arguments?.getString(Constants.TEXT_ARGUMENT_KEY)
-                if (text != null) {
-                    TextRecognitionResultScreen(text = URLDecoder.decode(text, "UTF-8"))
-                }
-            }
-
             composable(route = Screens.TransactionListScreen.route) {
-                TransactionListScreen(
-                    viewModel = viewModel,
-                    onAddTransactionClicked = { type ->
-                        navController.navigate("transaction/${type.name}")
-                    }
-                )
+                TransactionListScreen(viewModel, navController)
             }
 
             composable(route = Screens.SavingListScreen.route) { SavingsListScreen(navController = navController) }

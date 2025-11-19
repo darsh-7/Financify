@@ -24,8 +24,9 @@ class TransactionRepository(private val dao: TransactionDao) {
 
     suspend fun getTransactionById(id: String): Transaction? = dao.getTransactionById(id)
 
+    fun getTransactionsByType(type: TransactionType) = dao.getTransactionsByType(type)
+
     fun getAllCategories() = dao.getAllCategories()
 
     fun getCategoriesByType(type: TransactionType) = dao.getCategoriesByType(type)
-
 }

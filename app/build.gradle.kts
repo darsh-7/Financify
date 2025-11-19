@@ -121,6 +121,7 @@ dependencies {
     implementation(libs.google.generativeai)
 
     implementation("de.charlex.compose:speeddial:1.1.1")
+    implementation("com.leinardi.android:speed-dial.compose:1.0.0-alpha04")
 
     // Paging
     val pagingVersion = "3.3.0"

@@ -130,7 +130,7 @@ fun ReceiptUiPrev(navController: NavController, modifier: Modifier = Modifier) {
                     ReceiptRow("Amount:", "$2000")
                     ReceiptRow("Transaction Type:", "INCOME")
                     ReceiptRow("Date:", "1/11/2025 06:00 PM")
-                    ReceiptRow("Description:", "it.description")
+                    ReceiptRow("Description:", "it.descriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescriptiondescription")
 
                     DashedDivider(Modifier.padding(horizontal = 0.dp, vertical = 16.dp))
 
@@ -154,7 +154,7 @@ fun ReceiptUiPrev(navController: NavController, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@Preview(showSystemUi = true, showBackground = false)
 @Composable
 private fun ReceiptUiPreview() {
     ReceiptUiPrev(navController = NavController(LocalContext.current))
