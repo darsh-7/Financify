@@ -42,7 +42,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -59,16 +58,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.financify.R
-import com.financify.data.data_sources.local.room.entities.TransactionType
-import com.financify.presentation.navigation.Screens
-import com.financify.presentation.screens.add_transaction.TransactionViewModel
 import com.financify.presentation.screens.home_screen.model.SavingItem
 import com.financify.presentation.screens.home_screen.model.Transaction
 import com.leinardi.android.speeddial.compose.FabWithLabel
@@ -78,24 +73,39 @@ import com.leinardi.android.speeddial.compose.SpeedDialState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
-    ExperimentalMaterialApi::class,
+    ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class, ExperimentalMaterialApi::class
 )
 @Composable
-fun HomeScreen(
-    viewModel: TransactionViewModel,
-    onAddTransactionClicked: (TransactionType) -> Unit,
-    navController: NavController
-) {
+fun HomeScreenPrev() {
     val context = LocalContext.current
     val transactionsList = listOf(
         Transaction("1", "Salary", "fixed salary", 1200.0, LocalDate.now(), true),
         Transaction("2", "Rent Payment", "Rent Payment", -1200.0, LocalDate.now(), false),
-        Transaction("3", "Freelance Project", "Freelance Project", 500.0, LocalDate.now().minusDays(1), true),
-        Transaction("4", "Grocery Shopping", "shopping fee", -150.50, LocalDate.now().minusDays(1), false),
-        Transaction("5", "Investment Return", "Investment Return", 800.0, LocalDate.now().minusDays(2), true),
+        Transaction(
+            "3",
+            "Freelance Project",
+            "Freelance Project",
+            500.0,
+            LocalDate.now().minusDays(1),
+            true
+        ),
+        Transaction(
+            "4",
+            "Grocery Shopping",
+            "shopping fee",
+            -150.50,
+            LocalDate.now().minusDays(1),
+            false
+        ),
+        Transaction(
+            "5",
+            "Investment Return",
+            "Investment Return",
+            800.0,
+            LocalDate.now().minusDays(2),
+            true
+        ),
         Transaction("6", "Coffee", "shopping fee", -5.0, LocalDate.now().minusDays(3), false)
     )
 
@@ -116,7 +126,15 @@ fun HomeScreen(
         }
     }
 
-    val incomeTransactions by viewModel.incomeTransactions.collectAsState(initial = emptyList())
+    val incomeTransactions = listOf(
+        SavingItem("First Job Salary", "2000", 0.3f),
+        SavingItem("Upwork", "1200", 0.6f),
+        SavingItem("Second Job Salary", "1500", 0.5f),
+        SavingItem("Bonus", "12000", 0.6f),
+        SavingItem("Khamsat", "1000", 0.5f)
+    )
+
+//    val incomeTransactions by viewModel.incomeTransactions.collectAsState(initial = emptyList())
     val itemsToShow = incomeTransactions.take(4)
 
     val savingsList = listOf(
@@ -138,6 +156,7 @@ fun HomeScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -379,6 +398,7 @@ fun HomeScreen(
                 }
             }
 
+
             Spacer(modifier = Modifier.height(8.dp))
 
             if (itemsToShow.isEmpty()) {
@@ -430,7 +450,7 @@ fun HomeScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Text(
-                                        text = transaction.title.first().toString(),
+                                        text = transaction.name.first().toString(),
                                         fontSize = 20.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = cardColor
@@ -443,19 +463,20 @@ fun HomeScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
-                                        text = transaction.title,
+                                        text = transaction.name,
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Medium,
                                         color = Color.White
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
-                                        text = "$${transaction.amount}",
+                                        text = "$${transaction.totalAmount}",
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color.White
                                     )
                                 }
+
                             }
                         }
                     }
@@ -480,7 +501,7 @@ fun HomeScreen(
 
                 TextButton(
                     onClick = {
-                        navController.navigate(Screens.SavingListScreen.route)
+//                    navController.navigate(Screens.SavingListScreen.route)
                     }
                 ) {
                     Text(
@@ -584,7 +605,7 @@ fun HomeScreen(
 
                 TextButton(
                     onClick = {
-                        navController.navigate(Screens.TransactionListScreen.route)
+//                    navController.navigate(Screens.TransactionListScreen.route)
                     }
                 ) {
                     Text(
@@ -626,7 +647,9 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .size(40.dp)
                                         .background(
-                                            color = if (transaction.isIncome) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
+                                            color = if (transaction.isIncome) Color(0xFFE8F5E9) else Color(
+                                                0xFFFFEBEE
+                                            ),
                                             shape = CircleShape
                                         ),
                                     contentAlignment = Alignment.Center
@@ -635,7 +658,9 @@ fun HomeScreen(
                                         text = transaction.name.first().toString(),
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = if (transaction.isIncome) Color(0xFF2E7D32) else Color(0xFFC62828)
+                                        color = if (transaction.isIncome) Color(0xFF2E7D32) else Color(
+                                            0xFFC62828
+                                        )
                                     )
                                 }
 
@@ -658,12 +683,19 @@ fun HomeScreen(
                                     )
                                 }
                                 val sign = if (transaction.isIncome) "+" else "-"
-                                val amountWithSign = "$sign ${String.format("$%,.2f", kotlin.math.abs(transaction.amount))}"
+                                val amountWithSign = "$sign ${
+                                    String.format(
+                                        "$%,.2f",
+                                        kotlin.math.abs(transaction.amount)
+                                    )
+                                }"
                                 Text(
                                     text = amountWithSign,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (transaction.isIncome) Color(0xFF2E7D32) else Color(0xFFC62828)
+                                    color = if (transaction.isIncome) Color(0xFF2E7D32) else Color(
+                                        0xFFC62828
+                                    )
                                 )
                             }
                         }
@@ -671,8 +703,6 @@ fun HomeScreen(
                 }
             }
         }
-
-        // FAB with Speed Dial
         var speedDialState by rememberSaveable { mutableStateOf(SpeedDialState.Collapsed) }
         var overlayVisible: Boolean by rememberSaveable { mutableStateOf(speedDialState.isExpanded()) }
 
@@ -705,20 +735,13 @@ fun HomeScreen(
         ) {
             item {
                 FabWithLabel(
-                    fabBackgroundColor = Color(0xFFF4C9C9),
+                    fabBackgroundColor = Color(0xFFEFB0B0),
                     fabContentColor = Color(0xFFFFFFFF),
                     labelBackgroundColor = Color(0xFFFFFFFF),
-                    onClick = {
-                        viewModel.clearForm()
-                        onAddTransactionClicked(TransactionType.EXPENSE)
-                        overlayVisible = false
-                        speedDialState = speedDialState.toggle()
-                    },
+                    onClick = { },
                     labelContent = {
                         Text(
-                            text = "Expense",
-                            color = Color(0xFF333333),
-                            fontSize = 16.sp,
+                            text = "Expense", color = Color(0xFF333333), fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
                     },
@@ -731,17 +754,10 @@ fun HomeScreen(
                     fabBackgroundColor = Color(0xFF6DD9CC),
                     fabContentColor = Color(0xFFFF0000),
                     labelBackgroundColor = Color(0xFFFFFFFF),
-                    onClick = {
-                        viewModel.clearForm()
-                        onAddTransactionClicked(TransactionType.INCOME)
-                        overlayVisible = false
-                        speedDialState = speedDialState.toggle()
-                    },
+                    onClick = { },
                     labelContent = {
                         Text(
-                            text = "Income",
-                            color = Color(0xFF333333),
-                            fontSize = 16.sp,
+                            text = "Income", color = Color(0xFF333333), fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
                     },
@@ -751,4 +767,10 @@ fun HomeScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreenPrev()
 }

@@ -53,6 +53,13 @@ fun AddTransactionPrev(
     val coroutineScope = rememberCoroutineScope()
     val categories = emptyList<Transaction>()
 
+    val categoryColors = listOf(
+        Color(0xFF377CC8),
+        Color(0xFFE0533D),
+        Color(0xFFE78C9D),
+        Color(0xFFFBC02D)
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -71,9 +78,9 @@ fun AddTransactionPrev(
                 .fillMaxSize()
                 .background(Color(0xFFFDFDFD))
                 .padding(innerPadding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(22.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
 
             if (categories.isNotEmpty()) {
@@ -81,9 +88,13 @@ fun AddTransactionPrev(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(14.dp)
                 ) {
-                    items(categories.size) { category ->
-                        CategoryCard(transaction = categories[category]) {
-                            "viewModel.fillFormWithTransaction(it)"
+                    items(categories.size) { index ->
+                        val category = categories[index]
+                        val bgColor = categoryColors[index % categoryColors.size]
+                        CategoryCard(
+                            transaction = category,
+                            backgroundColor = bgColor
+                        ) {
                         }
                     }
                 }
@@ -92,15 +103,14 @@ fun AddTransactionPrev(
                     shape = RoundedCornerShape(16.dp),
                     elevation = CardDefaults.cardElevation(8.dp),
                     modifier = Modifier
-                        .size(150.dp, 130.dp)
+                        .size(160.dp, 140.dp)
                         .padding(top = 12.dp),
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Categories!",
-                            textAlign = TextAlign.Center,
+                            text = "No\nCategories Yet!",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                         )
@@ -109,6 +119,7 @@ fun AddTransactionPrev(
             }
 
             Card(
+                modifier = Modifier.fillMaxSize().padding(bottom = 18.dp),
                 shape = RoundedCornerShape(16.dp),
                 elevation = CardDefaults.cardElevation(4.dp),
             ) {
@@ -123,15 +134,15 @@ fun AddTransactionPrev(
 
                     InputField(
                         label = "Amount",
-                        value = "2000",
-                        onValueChange = { "2000" },
+                        value = "",
+                        onValueChange = { "" },
                         keyboardType = KeyboardType.Number
                     )
 
                     InputField(
                         label = "Title (e.g., Shopping, Salary, Rent)",
-                        value = "Shopping",
-                        onValueChange = { "Shopping" },
+                        value = "",
+                        onValueChange = { "" },
                     )
 
                     InputField(
@@ -146,8 +157,8 @@ fun AddTransactionPrev(
 
                     InputField(
                         label = "Description",
-                        value = "viewModel.description",
-                        onValueChange = { "viewModel.description" },
+                        value = "",
+                        onValueChange = { "" },
                     )
 
                     Row(

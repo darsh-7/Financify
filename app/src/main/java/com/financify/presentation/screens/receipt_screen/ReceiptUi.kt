@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -173,7 +174,11 @@ fun ReceiptUi(
                     .fillMaxWidth()
                     .height(50.dp),
                 shape = RoundedCornerShape(10.dp),
-                onClick = { navController.popBackStack(Screens.HomeScreen.route,true,) },
+                onClick = {
+                    navController.navigate(Screens.HomeScreen.route) {
+                        popUpTo(Screens.HomeScreen.route) { inclusive = false }
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0C9BF9))
             ) {
                 Text("Home", color = Color.White, fontSize = 18.sp)
@@ -212,6 +217,7 @@ fun DashedDivider(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ReceiptRow(label: String, value: String?, bold: Boolean = false) {
     Row(
@@ -230,6 +236,10 @@ fun ReceiptRow(label: String, value: String?, bold: Boolean = false) {
         if (value != null) {
             Text(
                 value,
+                modifier = Modifier
+                    .fillMaxWidth(0.7F),
+                maxLines = 4,
+                textAlign = TextAlign.End,
                 fontWeight = if (bold) FontWeight.Bold else FontWeight.Normal,
                 fontSize = 18.sp,
                 fontFamily = FontFamily.SansSerif

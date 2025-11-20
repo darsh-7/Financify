@@ -10,7 +10,10 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -18,11 +21,13 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,19 +35,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.financify.presentation.navigation.Screens
+import com.financify.data.data_sources.local.room.entities.TransactionType
+import com.financify.presentation.screens.add_transaction.TransactionViewModel
 import com.financify.presentation.screens.text_recognition_screen.components.CameraPreview
-import com.financify.presentation.screens.text_recognition_screen.viewmodel.TextRecognitionViewModel
 
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
-fun TextRecognitionScreen(navController: NavController, viewModel: TextRecognitionViewModel = viewModel()) {
+fun TextRecognitionScreen(navController: NavController, viewModel: TransactionViewModel) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
-    val state by viewModel.state.collectAsState()
+
+    var isProcessing by remember { mutableStateOf(false) }
+
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -64,18 +70,25 @@ fun TextRecognitionScreen(navController: NavController, viewModel: TextRecogniti
         }
     }
 
-    LaunchedEffect(state.recognizedText) {
-        if (state.recognizedText != null) {
-            navController.navigate(Screens.TextRecognitionResultScreen.passText(state.recognizedText!!))
-            viewModel.onTextProcessed()
+    LaunchedEffect(viewModel.isOcrLoading, viewModel.isParsing) {
+        if (!viewModel.isOcrLoading && !viewModel.isParsing && isProcessing) {
+            isProcessing = false
+            navController.navigate("transaction/${TransactionType.EXPENSE.name}")
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         CameraPreview(controller = cameraController, modifier = Modifier.fillMaxSize())
 
-        if (state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        if (isProcessing || viewModel.isOcrLoading || viewModel.isParsing) {
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Analyzing Receipt...")
+            }
         } else {
             IconButton(
                 modifier = Modifier
@@ -91,6 +104,7 @@ fun TextRecognitionScreen(navController: NavController, viewModel: TextRecogniti
                         executor,
                         object : ImageCapture.OnImageCapturedCallback() {
                             override fun onCaptureSuccess(imageProxy: ImageProxy) {
+                                isProcessing = true
                                 viewModel.processImage(imageProxy)
                             }
 
