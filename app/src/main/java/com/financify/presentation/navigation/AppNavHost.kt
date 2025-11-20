@@ -62,11 +62,13 @@ fun AppNavHost() {
     val viewModel: TransactionViewModel = viewModel(factory = factory)
 
     LaunchedEffect(biometricEnabled) {
-        if (biometricEnabled == null) {
+        if (biometricEnabled == true) {
             val biometricManager = BiometricManager.from(context)
             if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS) {
-                showBiometricDialog = true
+                showBiometricDialog = false
             }
+        } else if (biometricEnabled == null) {
+            showBiometricDialog = true
         }
     }
 
