@@ -36,6 +36,7 @@ fun AddGoalScreen(navController: NavController) {
     var targetAmountText by remember { mutableStateOf("") }
     var savedAmountText by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf<Date?>(null) }
+
     var noteText by remember { mutableStateOf("") }
 
     val backStackEntry = navController.currentBackStackEntry
@@ -43,7 +44,8 @@ fun AddGoalScreen(navController: NavController) {
     val isEditMode = !goalId.isNullOrBlank() && goalId != "-1"
 
     val context = LocalContext.current
-    val database = AppDatabase.getDatabase(context)
+    val database = remember { AppDatabase.getDatabase(context) }
+//    val database = AppDatabase.getDatabase(context)
     val repository = SavingGoalRepository(database.savingGoalDao())
 
     val viewModel: SavingGoalViewModel = viewModel(
@@ -62,24 +64,15 @@ fun AddGoalScreen(navController: NavController) {
             selectedGoal =
                 AllGoalTypes.firstOrNull { it.name == existingGoal.goalType } ?: GoalType.General
 
-            try {
-                selectedDate =
-                    SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).parse(existingGoal.selectedDate)
-            } catch (e: Exception) {
-                selectedDate = null
+            selectedDate = if (existingGoal.selectedDate != 0L) {
+                Date(existingGoal.selectedDate)
+            } else {
+                null
             }
+
         }
     }
-//    Box(
-//        modifier = Modifier.fillMaxSize()
-//    ) {
-//        Image(
-//            painter = painterResource(R.drawable.ic_launcher_background),
-//            contentDescription = null,
-//            modifier = Modifier.fillMaxSize(),
-//            contentScale = ContentScale.Crop,
-//            alpha = 0.5f
-//        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -124,6 +117,7 @@ fun AddGoalScreen(navController: NavController) {
                 val goalToSave = selectedGoal ?: GoalType.General
 
                 if (goalName.isNotEmpty() && validTargetAmount > 0.0) {
+                    val dateTimestamp = selectedDate?.time ?: 0L
 
                     CoroutineScope(Dispatchers.IO).launch {
                         viewModel.saveGoal(
@@ -132,12 +126,13 @@ fun AddGoalScreen(navController: NavController) {
                             targetAmount = validTargetAmount,
                             savedAmount = validSavedAmount,
                             goalType = (selectedGoal ?: GoalType.General).name,
-                            selectedDate = selectedDate?.let {
-                                SimpleDateFormat(
-                                    "dd/MM/yyyy",
-                                    Locale.ENGLISH
-                                ).format(it)
-                            } ?: "",
+                            selectedDate = dateTimestamp,
+//                            selectedDate = selectedDate?.let {
+//                                SimpleDateFormat(
+//                                    "dd/MM/yyyy",
+//                                    Locale.ENGLISH
+//                                ).format(it)
+//                            } ?: "",
                             note = noteText,
                             color = goalToSave.name,
                             icon = goalToSave.name,
@@ -163,4 +158,3 @@ fun AddGoalScreen(navController: NavController) {
 
         }
     }
-//}

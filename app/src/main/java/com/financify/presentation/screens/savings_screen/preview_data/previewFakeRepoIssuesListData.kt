@@ -1,4 +1,4 @@
-//package com.financify.presentation.screens.savings_screen.preview_data
+package com.financify.presentation.screens.savings_screen.preview_data//package com.financify.presentation.screens.savings_screen.preview_data
 //
 //import com.financify.presentation.model.CustomRemoteExceptionUiModel
 //

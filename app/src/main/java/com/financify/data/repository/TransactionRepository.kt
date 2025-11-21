@@ -29,4 +29,9 @@ class TransactionRepository(private val dao: TransactionDao) {
     fun getAllCategories() = dao.getAllCategories()
 
     fun getCategoriesByType(type: TransactionType) = dao.getCategoriesByType(type)
+
+    fun getTransactionsBetweenDates(startDate: Long, endDate: Long) =
+        dao.getTransactionsBetweenDates(startDate, endDate)
+
+
 }

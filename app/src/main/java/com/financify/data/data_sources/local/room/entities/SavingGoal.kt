@@ -12,9 +12,12 @@ data class SavingGoal(
     val targetAmount: Double,
     val savedAmount: Double,
     val goalType: String,
-    val selectedDate: String,
+    //    val selectedDate: String,
+    val selectedDate: Long,
     val note: String,
     val color: String,
-val icon: String
+    val icon: String,
+    val isCompleted: Boolean = false,
+    val actualCompletionDate: Long? = null
 )
 

@@ -47,8 +47,8 @@ fun GoalListTopBar(navController: NavController) {
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFFF5F7FA)
-        )
+//        colors = TopAppBarDefaults.topAppBarColors(
+//            containerColor = Color(0xFFF5F7FA)
+//        )
     )
 }

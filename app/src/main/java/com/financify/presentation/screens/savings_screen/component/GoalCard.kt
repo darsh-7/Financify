@@ -30,7 +30,20 @@ import com.financify.presentation.screens.savings_screen.utils.calculateRemainin
 import com.financify.presentation.screens.savings_screen.utils.getGoalColorByName
 import com.financify.presentation.screens.savings_screen.utils.getIconImageVector
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
+@Composable
+private fun formatTimestampToDateString(timestamp: Long): String {
+    return remember(timestamp) {
+        if (timestamp == 0L) {
+            "N/A"
+        } else {
+            SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(timestamp))
+        }
+    }
+}
 @Composable
 fun SavingGoalCard(
     goal: SavingGoal,
@@ -38,8 +51,13 @@ fun SavingGoalCard(
     onEdit: () -> Unit
 ) {
     val progress = if (goal.targetAmount > 0) (goal.savedAmount / goal.targetAmount) * 100 else 0.0
+
     val remainingDaysText = calculateRemainingDaysText(goal.selectedDate)
     val goalColor = getGoalColorByName(goal.color).copy(alpha = 0.7f)
+    val formattedDate = formatTimestampToDateString(goal.selectedDate)
+//    val progress = if (goal.targetAmount > 0) (goal.savedAmount / goal.targetAmount) * 100 else 0.0
+//    val remainingDaysText = calculateRemainingDaysText(goal.selectedDate)
+//    val goalColor = getGoalColorByName(goal.color).copy(alpha = 0.7f)
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -107,7 +125,9 @@ fun SavingGoalCard(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+//            GoalProgressRow(progress = progress, barColor = Color.Black.copy(alpha = 0.7f))
             GoalProgressRow(progress = progress, barColor = Color.Black.copy(alpha = 0.7f))
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
@@ -123,7 +143,7 @@ fun SavingGoalCard(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = "Target Date: ${goal.selectedDate}",
+                        text = "Target Date: $formattedDate",
                         fontSize = 12.sp,
                         modifier = Modifier.padding(horizontal = 4.dp),
                         color = Color.Black.copy(alpha = 0.7f)
