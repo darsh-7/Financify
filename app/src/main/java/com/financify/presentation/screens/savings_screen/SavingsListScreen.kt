@@ -26,11 +26,11 @@ fun SavingsListScreen(navController: NavController) {
  val viewModel: SavingGoalViewModel = viewModel(
   factory = SavingGoalViewModelFactory(repository)
  )
-
  val goalsList by viewModel.allGoals.collectAsState()
  val stats by viewModel.totalStats.collectAsState()
 
  Scaffold(
+  containerColor = Color.White,
   topBar = {
    GoalListTopBar(navController = navController)
   },
@@ -39,9 +39,9 @@ fun SavingsListScreen(navController: NavController) {
     modifier = Modifier
      .fillMaxSize()
      .padding(paddingValues)
-     .background(Color(0xFFF5F7FA))
+//     .background(Color(0xFFF5F7FA))
    ) {
-//   GoalsHeader(stats)
+
 
     SavingsListContent(
      navController = navController,

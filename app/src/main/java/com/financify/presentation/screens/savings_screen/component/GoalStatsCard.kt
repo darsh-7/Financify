@@ -11,52 +11,63 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.financify.presentation.screens.savings_screen.viewmodel.GoalStats
-import com.financify.presentation.theme.GoalColor_General
-import com.financify.presentation.theme.GoalColor_Home
-import com.financify.presentation.theme.GoalColor_Travel
-import com.financify.presentation.theme.Stats_card_background
-import com.financify.presentation.theme.light_babyBlue
 import java.text.DecimalFormat
+
+val PrimaryBlue = Color(0xFF1A79E1)
+val LighterBlue = PrimaryBlue.copy(alpha = 0.9f)
+val TrackColor = PrimaryBlue.copy(alpha = 0.2f)
+val StatsCardBackground = Color(0xFFFFFFFF)
 
 @Composable
 fun GoalsHeader(stats: GoalStats) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding( vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Stats_card_background,contentColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = StatsCardBackground,contentColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
 
-    ) {
+        ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     Icons.Filled.TrackChanges,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = PrimaryBlue,
                     modifier = Modifier.size(32.dp)
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = "Saving Goals",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    color = Color.Black
                 )
             }
+        }
+    }
+}
 
-            HorizontalDivider(
-                Modifier.padding(vertical = 12.dp),
-                color = Color(0xFFE0E0E0)
-            )
+@Composable
+fun TotalStatsCard(stats: GoalStats) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = StatsCardBackground,contentColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
 
+        ) {
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Total Statistics",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = Color.Black
             )
             Spacer(Modifier.height(12.dp))
 
@@ -70,7 +81,7 @@ fun GoalsHeader(stats: GoalStats) {
 
             TotalProgressRow(
                 progress = stats.totalProgress,
-                barColor = MaterialTheme.colorScheme.tertiary
+                barColor = LighterBlue
             )
         }
     }
@@ -108,14 +119,15 @@ fun TotalProgressRow(progress: Double, barColor: Color) {
                     .height(10.dp)
                     .clip(RoundedCornerShape(5.dp)),
                 color = barColor,
-                trackColor = barColor.copy(alpha = 0.2f),
+                trackColor = TrackColor,
                 strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
             )
             Spacer(Modifier.width(8.dp))
             Text(
                 text = "${decimalFormat.format(progress)}%",
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
+                fontSize = 14.sp,
+                color = Color.Black
             )
         }
     }

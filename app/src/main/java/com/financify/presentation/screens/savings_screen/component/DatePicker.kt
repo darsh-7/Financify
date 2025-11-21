@@ -108,15 +108,7 @@ fun DatePickerCard(
                 colors = DatePickerDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
-//                colors = DatePickerDefaults.colors( containerColor = Add_goal_background,
-//                    headlineContentColor = Color.White,
-//                    weekdayContentColor = Color.White.copy(alpha = 0.7f),
-//                    todayContentColor = Color.White,
-//                    selectedDayContainerColor = Color.White,
-//                    selectedDayContentColor = Add_goal_background,
-//                    currentYearContentColor = Color.White,
-//                    subheadContentColor = Color.White,
-//                )
+
             )
         }
     }

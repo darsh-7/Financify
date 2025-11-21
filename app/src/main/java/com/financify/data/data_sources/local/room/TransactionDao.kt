@@ -31,4 +31,10 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getTransactions(): PagingSource<Int, Transaction>
+
+
+    @Query("SELECT * FROM transactions WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+    fun getTransactionsBetweenDates(startDate: Long, endDate: Long): Flow<List<Transaction>>
+
+
 }

@@ -61,13 +61,22 @@ class SavingGoalViewModel(
         targetAmount: Double,
         savedAmount: Double,
         goalType: String,
-        selectedDate: String,
+        selectedDate:Long,
         note: String,
         color: String,
         icon: String
     ) {
         val existingId = _currentGoal.value?.id
+        val existingGoal = _currentGoal.value
 
+        val isGoalCompleted = savedAmount >= targetAmount
+
+        val completionDate = if (isGoalCompleted) {
+
+            existingGoal?.actualCompletionDate ?: System.currentTimeMillis()
+        } else {
+            null
+        }
         val goal = SavingGoal(
             id = existingId ?: UUID.randomUUID().toString(),
             userId = userId,
@@ -78,7 +87,9 @@ class SavingGoalViewModel(
             selectedDate = selectedDate,
             note = note,
             color = color,
-            icon = icon
+            icon = icon,
+            isCompleted = isGoalCompleted,
+            actualCompletionDate = completionDate
         )
 
         viewModelScope.launch {
@@ -91,6 +102,48 @@ class SavingGoalViewModel(
             repository.deleteGoal(goalId)
         }
     }
+
+    val completionStats: StateFlow<CompletionStats> = allGoals.map { goals ->
+        var completedOnTime = 0
+        var completedLate = 0
+        var notCompletedPastDue = 0
+        var notCompletedWithinDeadline = 0
+
+        val currentTime = System.currentTimeMillis()
+
+        goals.forEach { goal ->
+            if (goal.isCompleted) {
+                val completionTime = goal.actualCompletionDate ?: currentTime
+                val deadline = goal.selectedDate
+
+                if (completionTime <= deadline) {
+                    completedOnTime++
+                } else {
+                    completedLate++
+                }
+            } else {
+                val deadline = goal.selectedDate
+
+                if (currentTime > deadline) {
+                    notCompletedPastDue++
+                } else {
+                    notCompletedWithinDeadline++
+                }
+            }
+        }
+
+        CompletionStats(
+            totalGoals = goals.size,
+            completedOnTime = completedOnTime,
+            completedLate = completedLate,
+            notCompletedPastDue = notCompletedPastDue,
+            notCompletedWithinDeadline = notCompletedWithinDeadline
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = CompletionStats()
+    )
 }
 
 data class GoalStats(
@@ -98,4 +151,12 @@ data class GoalStats(
     val totalTarget: Double = 0.0,
     val totalGoals: Int = 0,
     val totalProgress: Double = 0.0
+)
+
+data class CompletionStats(
+    val completedOnTime: Int = 0,
+    val completedLate: Int = 0,
+    val totalGoals: Int = 0,
+    val notCompletedPastDue: Int = 0,
+    val notCompletedWithinDeadline: Int = 0
 )

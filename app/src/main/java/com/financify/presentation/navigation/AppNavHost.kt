@@ -25,17 +25,22 @@ import androidx.navigation.navArgument
 import com.financify.data.DataStoreManager
 import com.financify.data.data_sources.local.room.AppDatabase
 import com.financify.data.data_sources.local.room.entities.TransactionType
+import com.financify.data.repository.SavingGoalRepository
 import com.financify.data.repository.TransactionRepository
 import com.financify.presentation.screens.add_transaction.AddTransactionUi
 import com.financify.presentation.screens.add_transaction.TransactionViewModel
 import com.financify.presentation.screens.add_transaction.TransactionViewModelFactory
 import com.financify.presentation.screens.analysis_screen.AnalysisScreen
+import com.financify.presentation.screens.analysis_screen.viewmodel.AnalysisViewModel
+import com.financify.presentation.screens.analysis_screen.viewmodel.AnalysisViewModelFactory
 import com.financify.presentation.screens.cam_scan_screen.TransactionListScreen
 import com.financify.presentation.screens.home_screen.IssuesListScreen
 import com.financify.presentation.screens.home_screen.component.ui.HomeScreen
 import com.financify.presentation.screens.receipt_screen.ReceiptUi
 import com.financify.presentation.screens.savings_screen.AddGoalScreen
 import com.financify.presentation.screens.savings_screen.SavingsListScreen
+import com.financify.presentation.screens.savings_screen.viewmodel.SavingGoalViewModel
+import com.financify.presentation.screens.savings_screen.viewmodel.SavingGoalViewModelFactory
 import com.financify.presentation.screens.text_recognition_screen.TextRecognitionScreen
 import com.financify.presentation.screens.transaction_screen.RepoDetailsScreen
 import com.financify.presentation.utils.Constants
@@ -60,6 +65,8 @@ fun AppNavHost() {
     val repository = TransactionRepository(dao)
     val factory = TransactionViewModelFactory(repository)
     val viewModel: TransactionViewModel = viewModel(factory = factory)
+    val savingGoalDao = AppDatabase.getDatabase(context).savingGoalDao()
+    val savingGoalRepository = SavingGoalRepository(savingGoalDao)
 
     LaunchedEffect(biometricEnabled) {
         if (biometricEnabled == true) {
@@ -102,8 +109,8 @@ fun AppNavHost() {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute != Screens.TextRecognitionScreen.route &&
-                currentRoute != Screens.SavingListScreen.route
+            if (currentRoute != Screens.TextRecognitionScreen.route //&&
+               // currentRoute != Screens.SavingListScreen.route
             ) {
                 BottomNavigationBar(navController = navController)
             }
@@ -127,7 +134,23 @@ fun AppNavHost() {
                 TextRecognitionScreen(viewModel = viewModel, navController = navController)
             }
             composable(route = Screens.AnalysisScreen.route) {
-                AnalysisScreen(dataStoreManager = dataStoreManager)
+
+                val viewModel: AnalysisViewModel = viewModel(
+                    factory = AnalysisViewModelFactory(repository)
+                )
+
+                val savingGoalViewModel: SavingGoalViewModel = viewModel(
+                    factory = SavingGoalViewModelFactory(savingGoalRepository)
+                )
+
+                AnalysisScreen(
+                    viewModel = viewModel,
+                    savingGoalViewModel = savingGoalViewModel,
+                    navController,
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
             }
 
             composable(route = Screens.TransactionListScreen.route) {
@@ -147,6 +170,25 @@ fun AppNavHost() {
                 )
             ) {
                 AddGoalScreen(navController = navController)
+            }
+            composable(route = Screens.AnalysisScreen.route) {
+
+                val viewModel: AnalysisViewModel = viewModel(
+                    factory = AnalysisViewModelFactory(repository)
+                )
+
+                val savingGoalViewModel: SavingGoalViewModel = viewModel(
+                    factory = SavingGoalViewModelFactory(savingGoalRepository)
+                )
+
+                AnalysisScreen(
+                    viewModel = viewModel,
+                    savingGoalViewModel = savingGoalViewModel,
+                    navController,
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
             }
 
             composable(

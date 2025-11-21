@@ -6,25 +6,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.financify.presentation.theme.*
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-fun calculateRemainingDaysText(targetDateString: String): String {
+fun calculateRemainingDaysText(targetDateMillis: Long): String {
+    if (targetDateMillis == 0L) {
+        return "No Date Set"
+    }
     return try {
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        val targetDate = LocalDate.parse(targetDateString, formatter)
-        val today = LocalDate.now()
+        val targetInstant = Instant.ofEpochMilli(targetDateMillis)
+
+        val targetDate = targetInstant.atZone(ZoneId.systemDefault()).toLocalDate()
+        val today = LocalDate.now(ZoneId.systemDefault())
+
         val days = ChronoUnit.DAYS.between(today, targetDate)
 
         when {
-            days > 0 -> "$days Days Remaining"
+            days > 0 -> {
+                return when {
+                    days <= 7 -> "$days days left"
+                    days < 30 -> "${days / 7} weeks left"
+                    else -> "$days days left"
+                }
+            }
             days == 0L -> "Due Date!"
             else -> "Expired"
         }
     } catch (e: Exception) {
-        "Invalid Date"
+        "Date Error"
     }
+
 }
 
 @Composable
