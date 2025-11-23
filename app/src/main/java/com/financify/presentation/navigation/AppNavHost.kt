@@ -25,6 +25,7 @@ import androidx.navigation.navArgument
 import com.financify.data.DataStoreManager
 import com.financify.data.data_sources.local.room.AppDatabase
 import com.financify.data.data_sources.local.room.entities.TransactionType
+import com.financify.data.repository.SavingGoalRepository
 import com.financify.data.repository.TransactionRepository
 import com.financify.presentation.screens.add_transaction.AddTransactionUi
 import com.financify.presentation.screens.add_transaction.TransactionViewModel
@@ -33,6 +34,8 @@ import com.financify.presentation.screens.analysis_screen.AnalysisScreen
 import com.financify.presentation.screens.cam_scan_screen.TransactionListScreen
 import com.financify.presentation.screens.home_screen.IssuesListScreen
 import com.financify.presentation.screens.home_screen.component.ui.HomeScreen
+import com.financify.presentation.screens.home_screen.viewmodel.HomeViewModel
+import com.financify.presentation.screens.home_screen.viewmodel.HomeViewModelFactory
 import com.financify.presentation.screens.receipt_screen.ReceiptUi
 import com.financify.presentation.screens.savings_screen.AddGoalScreen
 import com.financify.presentation.screens.savings_screen.SavingsListScreen
@@ -114,15 +117,20 @@ fun AppNavHost() {
             startDestination = Screens.HomeScreen.route,
             modifier = Modifier.padding(it)
         ) {
+
             composable(route = Screens.HomeScreen.route) {
+                val homeFactory = HomeViewModelFactory(context)
+                val homeViewModel: HomeViewModel = viewModel(factory = homeFactory)
+
                 HomeScreen(
-                    viewModel = viewModel,
+                    viewModel = homeViewModel,
                     onAddTransactionClicked = { type ->
                         navController.navigate("transaction/${type.name}")
                     },
                     navController = navController
                 )
             }
+
             composable(route = Screens.TextRecognitionScreen.route) {
                 TextRecognitionScreen(viewModel = viewModel, navController = navController)
             }
@@ -134,7 +142,8 @@ fun AppNavHost() {
                 TransactionListScreen(viewModel, navController)
             }
 
-            composable(route = Screens.SavingListScreen.route) { SavingsListScreen(navController = navController) }
+            composable(route = Screens.SavingListScreen.route) {
+                SavingsListScreen(navController = navController) }
 
             composable(
                 route = Screens.AddGoalScreen.route,
