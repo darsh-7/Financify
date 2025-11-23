@@ -25,7 +25,7 @@ import com.financify.presentation.utils.Constants.Companion.USER_ID_ARGUMENT_KEY
 sealed class Screens(val route: String) {
     data object TransactionListScreen : Screens(REPO_LIST_SCREEN)
 
-    data object TransactionListScreen: Screens("$TRANSACTION_LIST_SCREEN/{$USER_ID_ARGUMENT_KEY}"){
+    data object TransactionsListScreen: Screens("$TRANSACTION_LIST_SCREEN/{$USER_ID_ARGUMENT_KEY}"){
         fun passUserId(userId: String): String {
             return "$TRANSACTION_LIST_SCREEN/$userId"
         }

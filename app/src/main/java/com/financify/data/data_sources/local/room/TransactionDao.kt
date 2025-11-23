@@ -17,6 +17,9 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE id = :transactionId")
     suspend fun getTransactionById(transactionId: String): Transaction?
 
+    @Query("SELECT COUNT(*) FROM transactions")
+    suspend fun getTransactionCount(): Int
+
     @Query("SELECT * FROM transactions WHERE isCategory = 1 ORDER BY date DESC")
     fun getAllCategories(): Flow<List<Transaction>>
 
@@ -28,4 +31,10 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getTransactions(): PagingSource<Int, Transaction>
+
+    @Query("SELECT * FROM transactions WHERE type = :type ORDER BY date DESC")
+    fun getTransactionsByType(type: TransactionType): PagingSource<Int, Transaction>
+
+    @Query("SELECT * FROM transactions ORDER BY date ASC")
+    fun getTransactionsOldest(): PagingSource<Int, Transaction>
 }

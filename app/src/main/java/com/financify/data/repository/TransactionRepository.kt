@@ -15,10 +15,26 @@ class TransactionRepository(private val dao: TransactionDao) {
 
     fun getAllTransactions() = dao.getAllTransactions()
 
+    suspend fun getTransactionCount(): Int = dao.getTransactionCount()
+
     fun getPaginatedTransactions(): Flow<PagingData<Transaction>> {
         return Pager(
             config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             pagingSourceFactory = { dao.getTransactions() }
+        ).flow
+    }
+
+    fun getPaginatedTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = { dao.getTransactionsByType(type) }
+        ).flow
+    }
+
+    fun getPaginatedTransactionsOldest(): Flow<PagingData<Transaction>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
+            pagingSourceFactory = { dao.getTransactionsOldest() }
         ).flow
     }
 

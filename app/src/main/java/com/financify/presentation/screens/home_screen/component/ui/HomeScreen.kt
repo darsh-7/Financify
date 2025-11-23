@@ -518,7 +518,7 @@ fun HomeScreen(navController: NavController) {
 
             TextButton(
                 onClick = {
-                    navController.navigate(Screens.TransactionListScreen.route)
+                    navController.navigate(Screens.TransactionsListScreen.passUserId("testId"))
                 }
             ) {
                 Text(
