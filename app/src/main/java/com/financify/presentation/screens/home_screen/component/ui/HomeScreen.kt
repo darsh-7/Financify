@@ -531,32 +531,34 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Transactions",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black
+            )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 4.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            TextButton(
+                onClick = {
+                    navController.navigate(Screens.TransactionsListScreen.passUserId("testId"))
+                }
             ) {
                 Text(
-                    text = "Transactions",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
+                    text = "See All",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF489FCD)
                 )
-                TextButton(
-                    onClick = { navController.navigate(Screens.TransactionListScreen.route) }
-                ) {
-                    Text(
-                        text = "See All",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF489FCD)
-                    )
-                }
             }
+        }
 
             Spacer(modifier = Modifier.height(8.dp))
             val groupedTransactions = recentTransactions

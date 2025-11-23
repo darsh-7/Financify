@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.financify.presentation.screens.home_screen.IssuesListScreen
 import com.financify.data.DataStoreManager
 import com.financify.data.data_sources.local.room.AppDatabase
 import com.financify.data.data_sources.local.room.entities.TransactionType
@@ -45,6 +46,11 @@ import com.financify.presentation.screens.savings_screen.viewmodel.SavingGoalVie
 import com.financify.presentation.screens.savings_screen.viewmodel.SavingGoalViewModelFactory
 import com.financify.presentation.screens.text_recognition_screen.TextRecognitionScreen
 import com.financify.presentation.screens.transaction_screen.RepoDetailsScreen
+import com.financify.presentation.screens.transaction_screen.transactions.TransactionsScreenRoot
+import com.financify.presentation.screens.transaction_screen.transactions.TransactionsViewModel
+import com.financify.presentation.utils.Constants.Companion.NAME_ARGUMENT_KEY
+import com.financify.presentation.utils.Constants.Companion.OWNER_ARGUMENT_KEY
+import com.financify.presentation.utils.Constants.Companion.USER_ID_ARGUMENT_KEY
 import com.financify.presentation.utils.Constants
 import java.net.URLDecoder
 import kotlinx.coroutines.CoroutineScope
@@ -69,6 +75,7 @@ fun AppNavHost() {
     val viewModel: TransactionViewModel = viewModel(factory = factory)
     val savingGoalDao = AppDatabase.getDatabase(context).savingGoalDao()
     val savingGoalRepository = SavingGoalRepository(savingGoalDao)
+    val transactionsViewModel: TransactionsViewModel = viewModel(factory = factory)
 
     LaunchedEffect(biometricEnabled) {
         if (biometricEnabled == true) {
@@ -137,6 +144,18 @@ fun AppNavHost() {
                 )
             }
 
+            composable(
+                route = Screens.TransactionsListScreen.route,
+                arguments = listOf(navArgument(USER_ID_ARGUMENT_KEY) {
+                    type = NavType.StringType
+                    nullable = true
+                })
+            ) { navBackStackEntry ->
+                val id = navBackStackEntry.arguments?.getString(USER_ID_ARGUMENT_KEY)
+                TransactionsScreenRoot(userId = id, viewModel = transactionsViewModel) {
+                    navController.popBackStack()
+                }
+            }
             composable(route = Screens.TextRecognitionScreen.route) {
                 TextRecognitionScreen(viewModel = viewModel, navController = navController)
             }
