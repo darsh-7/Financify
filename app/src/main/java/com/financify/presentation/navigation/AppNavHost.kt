@@ -66,7 +66,7 @@ fun AppNavHost() {
 
     val context = LocalContext.current
     val dataStoreManager = remember { DataStoreManager(context) }
-    val biometricEnabled by dataStoreManager.biometricEnabledFlow.collectAsState(initial = null)
+    val biometricEnabled by dataStoreManager.biometricEnabledFlow.collectAsState(initial = false)
     var showBiometricDialog by remember { mutableStateOf(false) }
 
     val dao = AppDatabase.getDatabase(context).TransactionDao()
