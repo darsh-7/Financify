@@ -41,8 +41,8 @@ interface TransactionDao {
 
 
 
-//    @Query("SELECT * FROM transactions WHERE type = :type ORDER BY date DESC")
-//    fun getTransactionsByType(type: TransactionType): PagingSource<Int, Transaction>
+    @Query("SELECT * FROM transactions WHERE type = :type ORDER BY date DESC")
+    fun getTransactionsByTypePaging(type: TransactionType): PagingSource<Int, Transaction>
 
     @Query("SELECT * FROM transactions ORDER BY date ASC")
     fun getTransactionsOldest(): PagingSource<Int, Transaction>

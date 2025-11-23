@@ -27,7 +27,7 @@ class TransactionRepository(private val dao: TransactionDao) {
     fun getPaginatedTransactionsByType(type: TransactionType): Flow<PagingData<Transaction>> {
         return Pager(
             config = PagingConfig(pageSize = 20, enablePlaceholders = false),
-            pagingSourceFactory = { dao.getTransactionsByType(type) }
+            pagingSourceFactory = { dao.getTransactionsByTypePaging(type) }
         ).flow
     }
 
