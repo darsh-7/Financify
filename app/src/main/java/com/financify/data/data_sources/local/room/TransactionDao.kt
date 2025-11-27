@@ -2,9 +2,11 @@ package com.financify.data.data_sources.local.room
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.financify.data.data_sources.local.room.entities.Transaction
 import com.financify.data.data_sources.local.room.entities.TransactionType
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +15,12 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction): Long
+
+    @Update
+    suspend fun updateTransaction(transaction: Transaction)
+
+    @Query("DELETE FROM transactions WHERE id = :transactionId")
+    suspend fun deleteTransaction(transactionId: String)
 
     @Query("SELECT * FROM transactions WHERE id = :transactionId")
     suspend fun getTransactionById(transactionId: String): Transaction?

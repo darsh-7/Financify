@@ -32,18 +32,11 @@ class TransactionsViewModel(
             val count = repository.getTransactionCount()
             emit(count > 0)
         }.flatMapLatest { hasData ->
-            if (hasData) {
-                when (filter) {
-                    is TransactionFilter.All, is TransactionFilter.Recent -> repository.getPaginatedTransactions()
-                    is TransactionFilter.Income -> repository.getPaginatedTransactionsByType(TransactionType.INCOME)
-                    is TransactionFilter.Expenses -> repository.getPaginatedTransactionsByType(TransactionType.EXPENSE)
-                    is TransactionFilter.Oldest -> repository.getPaginatedTransactionsOldest()
-                }
-            } else {
-                Pager(
-                    config = PagingConfig(pageSize = 20),
-                    pagingSourceFactory = { DummyPagingSource(filter) }
-                ).flow
+            when (filter) {
+                is TransactionFilter.All, is TransactionFilter.Recent -> repository.getPaginatedTransactions()
+                is TransactionFilter.Income -> repository.getPaginatedTransactionsByType(TransactionType.INCOME)
+                is TransactionFilter.Expenses -> repository.getPaginatedTransactionsByType(TransactionType.EXPENSE)
+                is TransactionFilter.Oldest -> repository.getPaginatedTransactionsOldest()
             }
         }
     }.cachedIn(viewModelScope)

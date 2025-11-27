@@ -2,6 +2,8 @@ package com.financify.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -84,12 +86,12 @@ data class BottomNavigationItem(
             ),
             BottomNavigationItem(
                 label = "Camera",
-                icon = Icons.Filled.Star,
+                icon = Icons.Filled.Camera,
                 route = Screens.TextRecognitionScreen.route
             ),
             BottomNavigationItem(
                 label = "Analysis",
-                icon = Icons.Filled.AccountCircle,
+                icon = Icons.Filled.BarChart,
                 route = Screens.AnalysisScreen.route
             ),
         )
