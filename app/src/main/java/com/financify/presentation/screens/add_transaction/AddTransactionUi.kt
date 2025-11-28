@@ -235,6 +235,7 @@ fun AddTransactionUi(
                                 coroutineScope.launch {
                                     val transactionId = viewModel.saveTransactionAndGetId()
                                     navController.navigate("receipt/$transactionId")
+                                    viewModel.clearForm() //Clear form after confirming.
                                 }
                             },
                             enabled = viewModel.amount.isNotEmpty(),
