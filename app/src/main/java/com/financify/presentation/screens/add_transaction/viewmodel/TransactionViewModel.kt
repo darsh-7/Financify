@@ -1,5 +1,6 @@
-package com.financify.presentation.screens.add_transaction
+package com.financify.presentation.screens.add_transaction.viewmodel
 
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +33,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
+@androidx.annotation.OptIn(ExperimentalGetImage::class)
 class TransactionViewModel(private val repository: TransactionRepository) : ViewModel() {
 
     var type by mutableStateOf(TransactionType.INCOME)
@@ -113,10 +114,7 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         apiKey = BuildConfig.GEMINI_API_KEY
     )
 
-    /*
-     *      ------ One Shared ViewModel for both Screens(Text Recognition and Transaction Screen) ------
-     *                      so AddTransactionScreen Deal with single data source.
-     */
+ //? Experimental function to process image for OCR
 
     // Process image for OCR
     fun processImage(imageProxy: ImageProxy) {

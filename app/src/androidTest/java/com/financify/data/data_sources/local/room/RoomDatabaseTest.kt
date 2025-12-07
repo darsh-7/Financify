@@ -41,9 +41,7 @@ class RoomDatabaseTest {
         db.close()
     }
 
-    // ==========================================
     // Transaction Tests
-    // ==========================================
 
     @Test
     fun insertAndGetTransaction() = runBlocking {
@@ -119,9 +117,7 @@ class RoomDatabaseTest {
         assertEquals(2, transactions.size)
     }
 
-    // ==========================================
     // SavingGoal Tests
-    // ==========================================
 
     @Test
     fun insertAndGetSavingGoal() = runBlocking {

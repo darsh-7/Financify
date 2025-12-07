@@ -1,4 +1,4 @@
-package com.financify.presentation.screens.add_transaction
+package com.financify.presentation.screens.add_transaction.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

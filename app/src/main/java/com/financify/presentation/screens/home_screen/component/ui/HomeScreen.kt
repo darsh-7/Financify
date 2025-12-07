@@ -75,6 +75,17 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.unit.dp
+import com.financify.data.DataStoreManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Switch
 
 @OptIn(
     ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class,
@@ -84,7 +95,8 @@ import java.time.format.DateTimeFormatter
 fun HomeScreen(
     viewModel: HomeViewModel,
     onAddTransactionClicked: (TransactionType) -> Unit,
-    navController: NavController
+    navController: NavController,
+    dataStoreManager: DataStoreManager
 ) {
     val context = LocalContext.current
 
@@ -97,12 +109,10 @@ fun HomeScreen(
 
     val itemsToShow = incomeSources.take(4)
     val savingsListLimited = recentSavings.take(4)
+    val biometricEnabled by dataStoreManager.biometricEnabledFlow.collectAsState(initial = false)
 
     val colors = listOf(
-        Color(0xFF377CC8),
-        Color(0xFFE0533D),
-        Color(0xFFE78C9D),
-        Color(0xFFFBC02D)
+        Color(0xFF377CC8), Color(0xFFE0533D), Color(0xFFE78C9D), Color(0xFFFBC02D)
     )
 
     Box(
@@ -124,14 +134,13 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.profile),
-                        contentDescription = "Profile image",
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
+//                    Image(
+//                        painter = painterResource(id = R.drawable.profile),
+//                        contentDescription = "Profile image",
+//                        modifier = Modifier
+//                            .size(50.dp)
+//                            .clip(RoundedCornerShape(8.dp))
+//                    )
                     Column {
                         Text(
                             text = "Good Morning",
@@ -140,23 +149,36 @@ fun HomeScreen(
                             color = Color.Gray
                         )
                         Text(
-                            text = "User Name",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.SemiBold
+                            text = "User Name", fontSize = 18.sp, fontWeight = FontWeight.SemiBold
                         )
                     }
                 }
-                IconButton(onClick = {
-                    Toast.makeText(context, "Notifications clicked", Toast.LENGTH_SHORT).show()
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Notifications",
-                        modifier = Modifier.size(28.dp),
-                        tint = Color.Black
-                    )
+
+//                IconButton(onClick = {
+//                    Toast.makeText(context, "Notifications clicked", Toast.LENGTH_SHORT).show()
+//                }) {
+//                    Icon(
+//                        imageVector = Icons.Default.Notifications,
+//                        contentDescription = "Notifications",
+//                        modifier = Modifier.size(28.dp),
+//                        tint = Color.Black
+//                    )
+//                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("Biometric", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Switch(
+                        //modifier = Modifier.height(8.dp).size(8.dp),
+                        checked = biometricEnabled ?: false, onCheckedChange = { isChecked ->
+                            CoroutineScope(Dispatchers.IO).launch {
+                                dataStoreManager.setBiometricEnabled(isChecked)
+                            }
+                        })
+
+
                 }
             }
+
 
             Box(
                 modifier = Modifier
@@ -176,8 +198,7 @@ fun HomeScreen(
                         .background(
                             Brush.verticalGradient(
                                 colors = listOf(
-                                    Color.Black.copy(alpha = 0.7f),
-                                    Color.Transparent
+                                    Color.Black.copy(alpha = 0.7f), Color.Transparent
                                 )
                             )
                         )
@@ -196,7 +217,8 @@ fun HomeScreen(
                             color = Color(0xFFF5F5F5)
                         )
                         Text(
-                            text = "$${String.format("%,.0f", totalBalance)}",                            fontWeight = FontWeight.Bold,
+                            text = "$${String.format("%,.0f", totalBalance)}",
+                            fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
                     }
@@ -208,9 +230,10 @@ fun HomeScreen(
                         IconButton(
                             onClick = {
                                 onAddTransactionClicked(TransactionType.INCOME)
-                            },
-                            modifier = Modifier
-                                .background(color = Color.White.copy(alpha = 0.9f), shape = CircleShape)
+                            }, modifier = Modifier
+                                .background(
+                                    color = Color.White.copy(alpha = 0.9f), shape = CircleShape
+                                )
                                 .padding(4.dp)
                                 .size(48.dp)
                         ) {
@@ -224,9 +247,10 @@ fun HomeScreen(
                         IconButton(
                             onClick = {
                                 onAddTransactionClicked(TransactionType.EXPENSE)
-                            },
-                            modifier = Modifier
-                                .background(color = Color.White.copy(alpha = 0.9f), shape = CircleShape)
+                            }, modifier = Modifier
+                                .background(
+                                    color = Color.White.copy(alpha = 0.9f), shape = CircleShape
+                                )
                                 .padding(4.dp)
                                 .size(40.dp)
                         ) {
@@ -250,8 +274,7 @@ fun HomeScreen(
                     .height(120.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .paint(
-                        painterResource(id = R.drawable.stat2),
-                        contentScale = ContentScale.Crop
+                        painterResource(id = R.drawable.stat2), contentScale = ContentScale.Crop
                     )
             ) {
                 Row(
@@ -268,9 +291,10 @@ fun HomeScreen(
                         IconButton(
                             onClick = {
                                 onAddTransactionClicked(TransactionType.INCOME)
-                            },
-                            modifier = Modifier
-                                .background(color = Color.White.copy(alpha = 0.9f), shape = CircleShape)
+                            }, modifier = Modifier
+                                .background(
+                                    color = Color.White.copy(alpha = 0.9f), shape = CircleShape
+                                )
                                 .padding(4.dp)
                                 .size(32.dp)
                         ) {
@@ -309,9 +333,10 @@ fun HomeScreen(
                         IconButton(
                             onClick = {
                                 onAddTransactionClicked(TransactionType.EXPENSE)
-                            },
-                            modifier = Modifier
-                                .background(color = Color.White.copy(alpha = 0.9f), shape = CircleShape)
+                            }, modifier = Modifier
+                                .background(
+                                    color = Color.White.copy(alpha = 0.9f), shape = CircleShape
+                                )
                                 .padding(4.dp)
                                 .size(32.dp)
                         ) {
@@ -371,8 +396,7 @@ fun HomeScreen(
                     colors = CardDefaults.cardColors(containerColor = Color.Gray)
                 ) {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "No\nEarnings Yet!",
@@ -453,8 +477,7 @@ fun HomeScreen(
                     color = Color.Black
                 )
                 TextButton(
-                    onClick = { navController.navigate(Screens.SavingListScreen.route) }
-                ) {
+                    onClick = { navController.navigate(Screens.SavingListScreen.route) }) {
                     Text(
                         text = "See All",
                         fontSize = 14.sp,
@@ -501,7 +524,11 @@ fun HomeScreen(
                                     color = Color.Gray
                                 )
                                 IconButton(onClick = {
-                                    Toast.makeText(context, "${item.goalName} options clicked", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "${item.goalName} options clicked",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.KeyboardArrowRight,
@@ -531,43 +558,38 @@ fun HomeScreen(
                 }
             }
 
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Transactions",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black
-            )
-
-            TextButton(
-                onClick = {
-                    navController.navigate(Screens.TransactionsListScreen.passUserId("testId"))
-                }
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "See All",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF489FCD)
+                    text = "Transactions",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.Black
                 )
+
+                TextButton(
+                    onClick = {
+                        navController.navigate(Screens.TransactionsListScreen.passUserId("testId"))
+                    }) {
+                    Text(
+                        text = "See All",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF489FCD)
+                    )
+                }
             }
-        }
 
             Spacer(modifier = Modifier.height(8.dp))
-            val groupedTransactions = recentTransactions
-                .groupBy {
-                    Instant.ofEpochMilli(it.date)
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
-                }
-                .toSortedMap(compareByDescending { it })
+            val groupedTransactions = recentTransactions.groupBy {
+                Instant.ofEpochMilli(it.date).atZone(ZoneId.systemDefault()).toLocalDate()
+            }.toSortedMap(compareByDescending { it })
 
             fun formatDate(date: LocalDate): String {
                 val today = LocalDate.now()
@@ -606,16 +628,18 @@ fun HomeScreen(
                                     modifier = Modifier
                                         .size(40.dp)
                                         .background(
-                                            color = if (transaction.type == TransactionType.INCOME) Color(0xFFE8F5E9) else Color(0xFFFFEBEE),
-                                            shape = CircleShape
-                                        ),
-                                    contentAlignment = Alignment.Center
+                                            color = if (transaction.type == TransactionType.INCOME) Color(
+                                                0xFFE8F5E9
+                                            ) else Color(0xFFFFEBEE), shape = CircleShape
+                                        ), contentAlignment = Alignment.Center
                                 ) {
                                     Text(
                                         text = transaction.title.first().toString(),
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = if (transaction.type == TransactionType.INCOME) Color(0xFF2E7D32) else Color(0xFFC62828)
+                                        color = if (transaction.type == TransactionType.INCOME) Color(
+                                            0xFF2E7D32
+                                        ) else Color(0xFFC62828)
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(12.dp))
@@ -634,33 +658,38 @@ fun HomeScreen(
                                         color = Color.Gray
                                     )
                                 }
-                                val sign = if (transaction.type == TransactionType.INCOME) "+" else "-"
-                                val amountWithSign = "$sign ${String.format("$%,.0f", kotlin.math.abs(transaction.amount))}"
+                                val sign =
+                                    if (transaction.type == TransactionType.INCOME) "+" else "-"
+                                val amountWithSign = "$sign ${
+                                    String.format(
+                                        "$%,.0f", kotlin.math.abs(transaction.amount)
+                                    )
+                                }"
                                 Text(
                                     text = amountWithSign,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (transaction.type == TransactionType.INCOME) Color(0xFF2E7D32) else Color(0xFFC62828)
+                                    color = if (transaction.type == TransactionType.INCOME) Color(
+                                        0xFF2E7D32
+                                    ) else Color(0xFFC62828)
                                 )
                             }
                         }
                     }
                 }
-            }}
+            }
+        }
         var speedDialState by rememberSaveable { mutableStateOf(SpeedDialState.Collapsed) }
         var overlayVisible: Boolean by rememberSaveable { mutableStateOf(speedDialState.isExpanded()) }
 
         if (overlayVisible) {
             SpeedDialOverlay(
-                visible = true,
-                modifier = Modifier
+                visible = true, modifier = Modifier
                     .matchParentSize()
-                    .zIndex(0f),
-                onClick = {
+                    .zIndex(0f), onClick = {
                     overlayVisible = false
                     speedDialState = speedDialState.toggle()
-                }
-            )
+                })
         }
 
         SpeedDial(
@@ -676,21 +705,18 @@ fun HomeScreen(
             onFabClick = { expanded ->
                 overlayVisible = !expanded
                 speedDialState = if (expanded) SpeedDialState.Collapsed else SpeedDialState.Expanded
-            }
-        ) {
+            }) {
             item {
                 FabWithLabel(
                     onClick = { onAddTransactionClicked(TransactionType.EXPENSE) },
-                    labelContent = { Text("Expense") }
-                ) {
+                    labelContent = { Text("Expense") }) {
                     Icon(Icons.Default.KeyboardArrowDown, null)
                 }
             }
             item {
                 FabWithLabel(
                     onClick = { onAddTransactionClicked(TransactionType.INCOME) },
-                    labelContent = { Text("Income") }
-                ) {
+                    labelContent = { Text("Income") }) {
                     Icon(Icons.Default.KeyboardArrowUp, null)
                 }
             }

@@ -29,13 +29,12 @@ import com.financify.data.data_sources.local.room.entities.TransactionType
 import com.financify.data.repository.SavingGoalRepository
 import com.financify.data.repository.TransactionRepository
 import com.financify.presentation.screens.add_transaction.AddTransactionUi
-import com.financify.presentation.screens.add_transaction.TransactionViewModel
-import com.financify.presentation.screens.add_transaction.TransactionViewModelFactory
+import com.financify.presentation.screens.add_transaction.viewmodel.TransactionViewModel
+import com.financify.presentation.screens.add_transaction.viewmodel.TransactionViewModelFactory
 import com.financify.presentation.screens.analysis_screen.AnalysisScreen
 import com.financify.presentation.screens.analysis_screen.viewmodel.AnalysisViewModel
 import com.financify.presentation.screens.analysis_screen.viewmodel.AnalysisViewModelFactory
 import com.financify.presentation.screens.cam_scan_screen.TransactionListScreen
-import com.financify.presentation.screens.home_screen.IssuesListScreen
 import com.financify.presentation.screens.home_screen.component.ui.HomeScreen
 import com.financify.presentation.screens.home_screen.viewmodel.HomeViewModel
 import com.financify.presentation.screens.home_screen.viewmodel.HomeViewModelFactory
@@ -48,11 +47,8 @@ import com.financify.presentation.screens.text_recognition_screen.TextRecognitio
 import com.financify.presentation.screens.transaction_screen.RepoDetailsScreen
 import com.financify.presentation.screens.transaction_screen.transactions.TransactionsScreenRoot
 import com.financify.presentation.screens.transaction_screen.transactions.TransactionsViewModel
-import com.financify.presentation.utils.Constants.Companion.NAME_ARGUMENT_KEY
-import com.financify.presentation.utils.Constants.Companion.OWNER_ARGUMENT_KEY
 import com.financify.presentation.utils.Constants.Companion.USER_ID_ARGUMENT_KEY
 import com.financify.presentation.utils.Constants
-import java.net.URLDecoder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -140,7 +136,8 @@ fun AppNavHost() {
                     onAddTransactionClicked = { type ->
                         navController.navigate("transaction/${type.name}")
                     },
-                    navController = navController
+                    navController = navController,
+                    dataStoreManager
                 )
             }
 

@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.financify.data.data_sources.local.room.entities.TransactionType
-import com.financify.presentation.screens.add_transaction.TransactionViewModel
+import com.financify.presentation.screens.add_transaction.viewmodel.TransactionViewModel
 import com.financify.presentation.screens.text_recognition_screen.components.CameraPreview
 
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
@@ -53,11 +53,11 @@ fun TextRecognitionScreen(navController: NavController, viewModel: TransactionVi
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (isGranted) {
-            // Permission granted, can start camera
-        } else {
-            // Permission denied, handle appropriately (e.g., show a message)
-        }
+//        if (isGranted) {
+//            // Permission granted, can start camera
+//        } else {
+//            // Permission denied, handle appropriately (e.g., show a message)
+//        }
     }
 
     LaunchedEffect(Unit) {

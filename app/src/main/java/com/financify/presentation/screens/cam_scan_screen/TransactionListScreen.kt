@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.financify.presentation.screens.add_transaction.TransactionViewModel
+import com.financify.presentation.screens.add_transaction.viewmodel.TransactionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

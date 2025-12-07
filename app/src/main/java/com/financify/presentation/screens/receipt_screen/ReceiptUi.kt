@@ -1,6 +1,6 @@
 package com.financify.presentation.screens.receipt_screen
 
-import com.financify.presentation.screens.add_transaction.TransactionViewModel
+import com.financify.presentation.screens.add_transaction.viewmodel.TransactionViewModel
 import android.content.Intent
 import android.graphics.Bitmap
 import android.widget.Toast
@@ -43,7 +43,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,7 +51,6 @@ import androidx.core.view.drawToBitmap
 import androidx.navigation.NavController
 import com.financify.R
 import com.financify.data.data_sources.local.room.entities.Transaction
-import com.financify.data.repository.TransactionRepository
 import com.financify.presentation.navigation.Screens
 import com.financify.presentation.screens.receipt_screen.components.NotchedTicketShape
 import java.io.File

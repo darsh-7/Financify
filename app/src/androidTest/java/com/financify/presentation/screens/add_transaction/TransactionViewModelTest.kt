@@ -1,7 +1,6 @@
 package com.financify.presentation.screens.add_transaction
 
 import android.content.Context
-import androidx.paging.PagingData
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,11 +9,9 @@ import com.financify.data.data_sources.local.room.TransactionDao
 import com.financify.data.data_sources.local.room.entities.Transaction
 import com.financify.data.data_sources.local.room.entities.TransactionType
 import com.financify.data.repository.TransactionRepository
+import com.financify.presentation.screens.add_transaction.viewmodel.TransactionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
